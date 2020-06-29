@@ -1,5 +1,6 @@
 package com.denisalves.cursomc.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,10 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repository; 
 
+	public List<Categoria> findAll() {
+		return repository.findAll();
+	}
+	
 	public Categoria findById(Integer id) {
 		Optional<Categoria> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
@@ -42,4 +47,5 @@ public class CategoriaService {
 			throw new DataIntegrityException("Não é possivel excluir uma categoria que esteja veiculada a produtos");
 		}
 	}
+	
 }
