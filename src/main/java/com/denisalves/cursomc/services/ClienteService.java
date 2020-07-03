@@ -26,29 +26,20 @@ import com.denisalves.cursomc.services.exceptions.ObjectNotFoundException;
 public class ClienteService {
 
 	@Autowired
-	private ClienteRepository repository;
+	private ClienteRepository clienteRepository;
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 
-	public List<Cliente> findAll() {
-		return repository.findAll();
-	}
-
 	public Cliente findById(Integer id) {
-		Optional<Cliente> obj = repository.findById(id);
+		Optional<Cliente> obj = clienteRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id));
-	}
-
-	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		return repository.findAll(pageRequest);
 	}
 
 	@Transactional
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);
-		obj = repository.save(obj);
+		obj = clienteRepository.save(obj);
 		enderecoRepository.saveAll(obj.getEnderecos());
 		return obj;
 	}
@@ -56,18 +47,27 @@ public class ClienteService {
 	public Cliente update(Cliente obj) {
 		Cliente newObj = findById(obj.getId());
 		updateData(newObj, obj);
-		return repository.save(newObj);
+		return clienteRepository.save(newObj);
 	}
 
 	public void deleteById(Integer id) {
 		findById(id);
 		try {
-			repository.deleteById(id);
+			clienteRepository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possivel excluir um cliente que tenha pedidos veiculado a ele");
 		}
 	}
 
+	public List<Cliente> findAll() {
+		return clienteRepository.findAll();
+	}
+	
+	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return clienteRepository.findAll(pageRequest);
+	}
+	
 	public Cliente fromDTO(ClienteDTO objDto) {
 		return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null);
 	}
