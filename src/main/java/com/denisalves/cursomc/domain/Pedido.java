@@ -1,4 +1,4 @@
-		package com.denisalves.cursomc.domain;
+package com.denisalves.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -51,6 +51,14 @@ public class Pedido implements Serializable{
 		this.instante = instante;
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
+	}
+	
+	public double getValorTotal() {
+		double sum = 0.0;
+		for (ItemPedido itemPedido : itens) {
+			sum += itemPedido.getSubTotal();
+		}
+		return sum;
 	}
 
 	public Integer getId() {
