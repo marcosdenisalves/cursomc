@@ -43,7 +43,7 @@ public class Cliente implements Serializable {
 	private List<Endereco> enderecos = new ArrayList<>();
 
 	@ElementCollection
-	@CollectionTable(name = "telefone")
+	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<>();
 	
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -116,7 +116,7 @@ public class Cliente implements Serializable {
 		this.senha = senha;
 	}
 	
-	public Set<Perfil> getPerfils() {
+	public Set<Perfil> getPerfis() {
 		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
 	}
 	
